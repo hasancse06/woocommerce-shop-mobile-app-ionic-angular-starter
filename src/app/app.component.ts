@@ -1,8 +1,11 @@
+import { Storage } from '@ionic/storage';
 import { Component, OnInit } from '@angular/core';
-
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Subscription } from 'rxjs';
+import { CommonfunctionService } from 'src/app/services/commonfunction.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -13,44 +16,47 @@ export class AppComponent implements OnInit {
   public selectedIndex = 0;
   public appPages = [
     {
-      title: 'Inbox',
-      url: '/folder/Inbox',
-      icon: 'mail'
+      title: 'Home',
+      url: '/topup',
+      icon: 'home'
     },
     {
-      title: 'Outbox',
-      url: '/folder/Outbox',
-      icon: 'paper-plane'
+      title: 'Product Categories',
+      url: '/categories',
+      icon: 'folder-open'
     },
-    {
-      title: 'Favorites',
-      url: '/folder/Favorites',
-      icon: 'heart'
-    },
-    {
-      title: 'Archived',
-      url: '/folder/Archived',
-      icon: 'archive'
-    },
-    {
-      title: 'Trash',
-      url: '/folder/Trash',
-      icon: 'trash'
-    },
-    {
-      title: 'Spam',
-      url: '/folder/Spam',
-      icon: 'warning'
-    }
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-
+  
+  currentUserDisplayName: any;
+  private subsCription: Subscription;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    private CFS: CommonfunctionService,
+    private router: Router,
+    private storage: Storage,
   ) {
     this.initializeApp();
+
+    // subscribe to home component messages
+    this.subsCription = this.CFS.getDisplayName().subscribe( displayName => {
+      if (displayName) {
+        this.currentUserDisplayName = displayName;
+        this.currentUserDisplayName = this.currentUserDisplayName.display_name;
+        //console.log('Current Display Name: ', this.currentUserDisplayName);
+      } else {
+        // clear messages when empty message received
+        this.currentUserDisplayName = '';
+      }
+    });
+
+    if(localStorage.getItem('display_name')){
+      this.currentUserDisplayName = {
+        'display_name': localStorage.getItem('display_name')
+      }
+    }
+
   }
 
   initializeApp() {
@@ -60,10 +66,14 @@ export class AppComponent implements OnInit {
     });
   }
 
+  logOut(){
+    localStorage.clear();
+    this.storage.clear();
+    this.router.navigateByUrl('/login');
+    window.location.reload();
+  }
+
   ngOnInit() {
-    const path = window.location.pathname.split('folder/')[1];
-    if (path !== undefined) {
-      this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
-    }
+
   }
 }
