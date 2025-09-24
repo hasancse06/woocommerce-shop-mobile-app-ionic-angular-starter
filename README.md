@@ -46,17 +46,10 @@ This project provides everything you need to build a modern, mobile-friendly Woo
 git clone https://github.com/YOUR_USERNAME/woocommerce-shop-mobile-app-ionic-angular-starter.git
 cd woocommerce-shop-mobile-app-ionic-angular-starter
 ```
+## Screenshot
 
-## 🧠 SEO Keywords
-
-> woocommerce ionic angular mobile app  
-> wordpress login register jwt angular  
-> ionic woocommerce customer login mobile  
-> headless woocommerce mobile app  
-> hybrid ecommerce app ionic angular  
-> woocommerce rest api categories products mobile  
-> wordpress reset password rest api jwt  
-> ionic angular wordpress woocommerce authentication
+![Screenshot](screenshot-1.jpg)
+![Screenshot](product-cat.jpg)
 
    
 ## 🙌 Author
